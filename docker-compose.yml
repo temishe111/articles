@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  app:
+    build: .docker/php
+    container_name: php-${APP_NAME}
+    volumes:
+      - ./:/${APP_DIRECTORY}
+    working_dir: /${APP_DIRECTORY}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - net
+
+  web:
+    image: nginx:alpine
+    container_name: nginx-${APP_NAME}
+    depends_on:
+      - app
+    ports:
+      - ${APP_PORT}:80
+    volumes:
+      - ./:/${APP_DIRECTORY}
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - net
+
+  pg:
+    image: postgres:16
+    container_name: psql-${APP_NAME}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGPORT: ${PGPORT}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - ${POSTGRES_EXT_PORT}:${PGPORT}
+    networks:
+      - net
+
+  composer:
+    image: composer:latest
+    container_name: composer-${APP_NAME}
+    volumes:
+      - ./:/${APP_DIRECTORY}
+    working_dir: /${APP_DIRECTORY}
+    entrypoint: [ "/bin/sh", "-c" ]
+    command: [ "composer install" ]
+    networks:
+      - net
+    depends_on:
+      - app
+
+volumes:
+  pgdata:
+  pgdata-test:
+
+networks:
+  net:
+    driver: bridge

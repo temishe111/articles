@@ -11,6 +11,7 @@ class IndexController extends AbstractController
     #[Route('/')]
     public function index(): Response
     {
+        $a =1;
         return new Response(
             json_encode([
                 'description' => 'Успешная регистрация',

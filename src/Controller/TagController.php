@@ -22,7 +22,7 @@ class TagController extends AbstractController
         $requestData = $this->parseRequest($request);
 
         $tag = new Tag();
-        $this->validate($tag, $requestData);
+        $this->handleRequest($tag, $requestData);
 
         $em->persist($tag);
         $em->flush();
@@ -42,7 +42,7 @@ class TagController extends AbstractController
             throw new HttpException(Response::HTTP_NOT_FOUND, 'Tag to update not found');
         }
 
-        $this->validate($tag, $requestData);
+        $this->handleRequest($tag, $requestData);
         $em->persist($tag);
         $em->flush();
 
@@ -72,7 +72,7 @@ class TagController extends AbstractController
      * @param array $requestData
      * @return void
      */
-    private function validate(Tag $tag, array $requestData): void
+    private function handleRequest(Tag $tag, array $requestData): void
     {
         $form = $this->createFormBuilder($tag)
             ->add('name', TextType::class)

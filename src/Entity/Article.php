@@ -6,7 +6,9 @@ namespace App\Entity;
 
 use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -29,7 +31,7 @@ class Article
     private \DateTimeImmutable $updatedAt;
 
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: "articles")]
-    private ArrayCollection $tags;
+    private Collection $tags;
 
     public function __construct() {
         $this->tags = new ArrayCollection();
@@ -47,7 +49,7 @@ class Article
      * @param string $id
      * @return $this
      */
-    public function setId(string $id): static
+    public function setId(int $id): static
     {
         $this->id = $id;
 
@@ -133,7 +135,7 @@ class Article
     /**
      * @return ArrayCollection
      */
-    public function getTags(): ArrayCollection
+    public function getTags(): Collection
     {
         return $this->tags;
     }
@@ -147,6 +149,8 @@ class Article
         if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
         }
+
+        return $this;
     }
 
     /**

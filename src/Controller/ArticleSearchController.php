@@ -55,6 +55,7 @@ class ArticleSearchController extends AbstractController
                 AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function (object $object, ?string $format, array $context) {
                     return $object->getId();
                 },
+                'groups' => ['article', 'tag'],
             ]),
         ]);
     }

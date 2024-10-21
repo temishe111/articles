@@ -44,6 +44,7 @@ class ArticleController extends AbstractController
                 AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function (object $object, ?string $format, array $context) {
                     return $object->getId();
                 },
+                'groups' => ['article', 'tag'],
             ])
         ]);
     }
@@ -77,6 +78,7 @@ class ArticleController extends AbstractController
                 AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function (object $object, ?string $format, array $context) {
                     return $object->getId();
                 },
+                'groups' => ['article', 'tag'],
             ])
         ]);
     }

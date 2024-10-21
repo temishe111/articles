@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TagRepository::class)]
@@ -23,6 +25,7 @@ class Tag
     #[ORM\Column(length: 255, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_]+$/', message: 'Allows only latin letters, underscore and numbers')]
+    #[Groups(['tag'])]
     private string $name;
 
     #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: "tags")]
